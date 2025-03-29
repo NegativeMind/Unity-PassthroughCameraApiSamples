@@ -184,6 +184,14 @@ To learn more about the capabilities of **`PassthroughCameraUtils`** class, refe
 * **Upgrading to Unity 6:**
    - When updating the project to **`Unity 6`**, the Android Manifest will need to be updated. This can be done either manually or by using one of two Meta tools, **Meta** > **Tools** > **Update AndroidManiest.xml** or **Meta** > **Tools** > **Create store-compatible AndroidManiest.xml**.
 
+   - Android Manifest *android:name="com.unity3d.player.UnityPlayerActivity"* must be changed to *android:name="com.unity3d.player.UnityPlayer**Game**Activity"*.
+
+* **Using Open XR:**
+   - When using **`Open XR`** plugin, the **Environment Depth** feature will be ONLY supported under **`Unity 6`**. Please read the [Depth API documentation](https://developers.meta.com/horizon/documentation/unity/unity-depthapi-overview/) for more information.
+   - **MultiObject Detection** sample built using Unity 2022 will not place the markers correctly, because of this limitation with Open XR and **Environment Depth**.
+   - Android Manifest will need the *android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"* attribute added to the activity tag.
+   - We recommend to install (com.unity.xr.meta-openxr@2.1.0 or latest) and select all **Meta SDK features** in the **`Project Settings`** > **`XR Plug-in Management`** > **`Open XR`**.
+
 > [!IMPORTANT]
 > The `horizonos.permission.HEADSET_CAMERA` permission has to be added back into the Manifest manually after updating.
 
@@ -300,6 +308,18 @@ Unity Sentis offers a framework to load models from popular open-source platform
 
 - **Current Status:**
   Sentis does not currently leverage any NPU or hardware acceleration. It operates as a regular Android platform application on Quest devices, so factor this into model selection.
+
+### Report an issue
+
+If you encounter any issues, please report them with the following details:
+
+- **Unity Engine version** used in your project.
+- **XR plugin** used in your project (Oculus XR or Open XR) and the version number.
+- **Quest device** model and **Horizon OS version**.
+- Attach in your report any useful **logcat logs**.
+  - You can use `adb logcat >> log.txt` to save the logs to a file.
+- Attach any **video or screenshot** of the issue.
+- Any **relevant information** about your specific use case, e.g. other sdk or plugins used in your project.
 
 ## License
 
