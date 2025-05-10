@@ -14,9 +14,15 @@ namespace PassthroughCameraSamples.MultiObjectDetection
     public class EnvironmentRayCastSampleManager : MonoBehaviour
     {
         private const string SPATIALPERMISSION = "com.oculus.permission.USE_SCENE";
+        [SerializeField] private EnvironmentRaycastManager m_raycastManager;
 
-        public Transform Camera;
-        public EnvironmentRaycastManager RaycastManager;
+        private void Start()
+        {
+            if (!EnvironmentRaycastManager.IsSupported)
+            {
+                Debug.LogError("EnvironmentRaycastManager is not supported: please read the official documentation to get more details. (https://developers.meta.com/horizon/documentation/unity/unity-depthapi-overview/)");
+            }
+        }
 
         public bool HasScenePermission()
         {
@@ -27,20 +33,25 @@ namespace PassthroughCameraSamples.MultiObjectDetection
 #endif
         }
 
-        public Transform PlaceGameObject(Vector3 cameraPosition)
+        public Vector3? PlaceGameObjectByScreenPos(Ray ray)
         {
-            transform.position = Camera.position;
-            transform.LookAt(cameraPosition);
-
-            var ray = new Ray(Camera.position, transform.forward);
-            if (RaycastManager.Raycast(ray, out var hitInfo))
+            if (EnvironmentRaycastManager.IsSupported)
             {
-                transform.SetPositionAndRotation(
-                    hitInfo.point,
-                    Quaternion.LookRotation(hitInfo.normal, Vector3.up));
+                if (m_raycastManager.Raycast(ray, out var hitInfo))
+                {
+                    return hitInfo.point;
+                }
+                else
+                {
+                    Debug.Log("RaycastManager failed");
+                    return null;
+                }
             }
-
-            return transform;
+            else
+            {
+                Debug.LogError("EnvironmentRaycastManager is not supported");
+                return null;
+            }
         }
     }
 }
